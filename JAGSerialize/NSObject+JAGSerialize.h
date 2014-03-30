@@ -6,10 +6,10 @@
 #import <Foundation/Foundation.h>
 
 /**
- *  JAGSerialize Category is additional serialize method for NSObject.
+ *  JAGSerialize category add serialize method for NSObject.
  *
  *  @author Ryu Iwasaki
- *  @version 1.6
+ *  @version 1.0.0
  *
  *
  **/
@@ -17,7 +17,6 @@
 
 /**
  * Load data with target key.
- * Load path and filename are using automatic.
  *
  * @param key original key of using input.
  *
@@ -33,7 +32,7 @@
  *
  * @param key original key of using input.
  *
- * @param completion called when finish loding method.
+ * @param completion the block is called when finished loading method.
  *
  * @return load file data.
  *
@@ -44,7 +43,7 @@
 
 /**
  * Save data.
- * Using Main thread.
+ * Using main thread.
  *
  * @param data save data object.
  *
@@ -65,7 +64,7 @@
  *
  * @param key original key in the class. and Using load method.
  *
- * @param completion called when finish archiving method.
+ * @param completion called when finished archiving method.
  *
  * @return Success status Yes / No.
  *
