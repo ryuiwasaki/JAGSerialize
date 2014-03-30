@@ -6,6 +6,6 @@ Pod::Spec.new do |s|
   s.authors      = { 'Ryu Iwasaki' => 'ryu.contact.jp@gmail.com' } 
   s.summary      = 'Serialize method addition for NSObject.'
   s.source       = { :git => 'https://github.com/ryuiwasaki/JAGSerialize.git' }
-  s.source_files = 'NSObject+JAGSerialize.h,m'
+  s.source_files = 'JAGSerialize'
   s.requires_arc = true
 end
