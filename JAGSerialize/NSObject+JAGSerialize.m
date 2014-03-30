@@ -13,45 +13,45 @@
 //--------------------------------------------------------------//
 
 - (id)loadDataForKey:(NSString *)key{
-
-    NSString *fileName = [NSString stringWithFormat:@"%@-%@",key,[self _archiveDataFileName]];
     
-    NSString *archiveFilePath = [self _archiveFilePathWithDirectoryNameInDocumentsDirectory:[self _archiveDataDirectoryName]
-                                                                                  fileName:fileName];
+    NSString *fileName = [self _fileNameWithKey:key];
+    
+    NSString *archiveFilePath = [self _archiveFilePathWithDirectoryNameInDocumentsDirectory:[self _directoryName]
+                                                                                   fileName:fileName];
     
     id data = [NSKeyedUnarchiver unarchiveObjectWithFile:archiveFilePath];
-
+    
     if (data) {
-
+        
         return data;
     } else {
-
+        
         return nil;
         
     }
-
+    
 }
 
 - (void)loadDataForKey:(NSString *)key completionBlock:(void(^)(id dataObject))completion{
     
     __block NSObject *weakSelf = self;
-
+    
     [[[NSOperationQueue alloc]init] addOperationWithBlock:^{
         
         id dataObject = [weakSelf loadDataForKey:key];
         
         completion(dataObject);
-       
+        
     }];
 }
 
 
 - (BOOL)saveWithData:(id<NSCoding>)data forKey:(NSString *)key{
     
-    NSString *fileName = [NSString stringWithFormat:@"%@-%@",key,[self _archiveDataFileName]];
+    NSString *fileName = [self _fileNameWithKey:key];
     
-    NSString *archiveFilePath = [self _archiveFilePathWithDirectoryNameInDocumentsDirectory:[self _archiveDataDirectoryName]
-                                                                                  fileName:fileName];
+    NSString *archiveFilePath = [self _archiveFilePathWithDirectoryNameInDocumentsDirectory:[self _directoryName]
+                                                                                   fileName:fileName];
     if ( [NSKeyedArchiver archiveRootObject:data toFile:archiveFilePath] ) {
         
         return YES;
@@ -63,17 +63,17 @@
 
 - (void)saveWithData:(id<NSCoding>)data forKey:(NSString *)key completionBlock:(void(^)(BOOL success))completion{
     
-        __block NSObject *weakSelf = self;
-        [[[NSOperationQueue alloc]init] addOperationWithBlock:^{
-            
-                BOOL success = [weakSelf saveWithData:data forKey:key];
-                completion(success);
-        }];
+    __block NSObject *weakSelf = self;
+    [[[NSOperationQueue alloc]init] addOperationWithBlock:^{
+        
+        BOOL success = [weakSelf saveWithData:data forKey:key];
+        completion(success);
+    }];
 }
 
 
 - (NSString *)_archiveFilePathWithDirectoryNameInDocumentsDirectory:(NSString *)dirName fileName:(NSString *)fileName{
-   
+    
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirPath = [paths objectAtIndex:0];
     NSString *archiveDirPath = [documentsDirPath stringByAppendingPathComponent:dirName];
@@ -88,7 +88,7 @@
                                      attributes:nil
                                           error:&error] ) {
             if (error) {
-
+                
             }
         }
     }
@@ -98,18 +98,19 @@
     return archiveFilePath;
 }
 
-- (NSString *)_archiveDataDirectoryName{
+- (NSString *)_fileNameWithKey:(NSString *)key{
+    
+    NSString *fileName = [NSString stringWithFormat:@".%@-%@.dat",NSStringFromClass([self class]),key];
+    
+    return fileName;
+}
+
+- (NSString *)_directoryName{
     
     NSString *dirName = [[NSString alloc]initWithFormat:@".%@",NSStringFromClass([self class])];
     
     return dirName;
 }
 
-- (NSString *)_archiveDataFileName{
-    
-    NSString *fileName = [[NSString alloc]initWithFormat:@".%@.dat",NSStringFromClass([self class])];
-    
-    return fileName;
-}
 
 @end
